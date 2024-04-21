@@ -94,42 +94,42 @@ class App(customtkinter.CTk):
                                                    text="third way",
                                                    fg_color="transparent", text_color=("gray10", "gray90"),
                                                    hover_color=("gray70", "gray30"),
-                                                   image=self.logo_image, anchor="w")  # , command=self.first_button)
+                                                   image=self.logo_image, anchor="w" , command=self.seventhFrame_button_event)
         self.sevenButton.grid(row=4, column=0, sticky="ew", pady=5)
         self.eightButton = customtkinter.CTkButton(self.navigation_frame, corner_radius=0, height=40,
                                                     border_spacing=10,
                                                     text="third way",
                                                     fg_color="transparent", text_color=("gray10", "gray90"),
                                                     hover_color=("gray70", "gray30"),
-                                                    image=self.logo_image, anchor="w")  # , command=self.first_button)
+                                                    image=self.logo_image, anchor="w" , command=self.eighthFrame_button_event)
         self.eightButton.grid(row=4, column=1, sticky="ew", pady=5)
         self.nineButton = customtkinter.CTkButton(self.navigation_frame, corner_radius=0, height=40,
                                                    border_spacing=10,
                                                    text="third way",
                                                    fg_color="transparent", text_color=("gray10", "gray90"),
                                                    hover_color=("gray70", "gray30"),
-                                                   image=self.logo_image, anchor="w")  # , command=self.first_button)
+                                                   image=self.logo_image, anchor="w", command=self.ninthFrame_button_event)
         self.nineButton.grid(row=5, column=0, sticky="ew", pady=5)
         self.tenButton = customtkinter.CTkButton(self.navigation_frame, corner_radius=0, height=40,
                                                     border_spacing=10,
                                                     text="third way",
                                                     fg_color="transparent", text_color=("gray10", "gray90"),
                                                     hover_color=("gray70", "gray30"),
-                                                    image=self.logo_image, anchor="w")  # , command=self.first_button)
+                                                    image=self.logo_image, anchor="w" , command=self.tenthFrame_button_event)
         self.tenButton.grid(row=5, column=1, sticky="ew", pady=5)
         self.elevenButton = customtkinter.CTkButton(self.navigation_frame, corner_radius=0, height=40,
                                                    border_spacing=10,
                                                    text="third way",
                                                    fg_color="transparent", text_color=("gray10", "gray90"),
                                                    hover_color=("gray70", "gray30"),
-                                                   image=self.logo_image, anchor="w")  # , command=self.first_button)
+                                                   image=self.logo_image, anchor="w" , command=self.eleventhFrame_button_event)
         self.elevenButton.grid(row=6, column=0, sticky="ew", pady=5)
         self.twelveButton = customtkinter.CTkButton(self.navigation_frame, corner_radius=0, height=40,
                                                     border_spacing=10,
                                                     text="third way",
                                                     fg_color="transparent", text_color=("gray10", "gray90"),
                                                     hover_color=("gray70", "gray30"),
-                                                    image=self.logo_image, anchor="w")  # , command=self.first_button)
+                                                    image=self.logo_image, anchor="w" , command=self.twelvethFrame_button_event)
         self.twelveButton.grid(row=6, column=1, sticky="ew", pady=5)
         self.appearance_mode_menu = customtkinter.CTkOptionMenu(self.navigation_frame,
                                                                 values=["Light", "Dark", "System"],
@@ -144,14 +144,26 @@ class App(customtkinter.CTk):
         self.fourthFrame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.fifthFrame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.sixthFrame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
+        self.seventhFrame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
+        self.eighthFrame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
+        self.ninthFrame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
+        self.tenthFrame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
+        self.eleventhFrame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
+        self.twelvethFrame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
 
+        
         self.create_gui_elements(self.firstFrame,"firstWay")
         self.create_gui_elements(self.secondFrame,"second way")
         self.create_gui_elements(self.thirdFrame, "thirdFrame way")
         self.create_gui_elements(self.fourthFrame, "fourthFrame way")
         self.create_gui_elements(self.fifthFrame, "fifthFrame way")
         self.create_gui_elements(self.sixthFrame, "sixthFrame way")
-
+        self.create_gui_elements(self.seventhFrame, "seventh way")
+        self.create_gui_elements(self.eighthFrame, "eighth way")
+        self.create_gui_elements(self.ninthFrame, "ninth way")
+        self.create_gui_elements(self.tenthFrame, "tenth way")
+        self.create_gui_elements(self.eleventhFrame, "eleventh way")
+        self.create_gui_elements(self.twelvethFrame, "twelveth way")
        
         self.select_frame_by_name("firstFrame")
         #==> Functions
@@ -167,7 +179,12 @@ class App(customtkinter.CTk):
         self.fourthButton.configure(fg_color=("gray75", "gray25") if name == "fourthFrame" else "transparent")
         self.fifthButton.configure(fg_color=("gray75", "gray25") if name == "fifthFrame" else "transparent")
         self.sixthButton.configure(fg_color=("gray75", "gray25") if name == "sixthFrame" else "transparent")
-      
+        self.sevenButton.configure(fg_color=("gray75", "gray25") if name == "seventhFrame" else "transparent")
+        self.eightButton.configure(fg_color=("gray75", "gray25") if name == "eighthFrame" else "transparent")
+        self.nineButton.configure(fg_color=("gray75", "gray25") if name == "ninthFrame" else "transparent")
+        self.tenButton.configure(fg_color=("gray75", "gray25") if name == "tenthFrame" else "transparent")
+        self.elevenButton.configure(fg_color=("gray75", "gray25") if name == "eleventhFrame" else "transparent")
+        self.twelveButton.configure(fg_color=("gray75", "gray25") if name == "twelvethFrame" else "transparent")
 
 
         # show selected frame
@@ -201,6 +218,33 @@ class App(customtkinter.CTk):
                 self.sixthFrame.grid(row=0, column=1, sticky="nsew")
         else:
                 self.sixthFrame.grid_forget()
+
+        if name == "seventhFrame":
+            self.seventhFrame.grid(row=0, column=1, sticky="nsew")
+        else:
+            self.seventhFrame.grid_forget()
+
+        if name == "eighthFrame":
+            self.eighthFrame.grid(row=0, column=1, sticky="nsew")
+        else:
+            self.eighthFrame.grid_forget()
+        if name == "ninthFrame":
+            self.ninthFrame.grid(row=0, column=1, sticky="nsew")
+        else:
+            self.ninthFrame.grid_forget()
+        if name == "tenthFrame":
+            self.tenthFrame.grid(row=0, column=1, sticky="nsew")
+        else:
+            self.tenthFrame.grid_forget()
+
+        if name == "eleventhFrame":
+            self.eleventhFrame.grid(row=0, column=1, sticky="nsew")
+        else:
+           self.eleventhFrame.grid_forget()
+        if name == "twelvethFrame":
+           self.twelvethFrame.grid(row=0, column=1, sticky="nsew")
+        else:
+           self.twelvethFrame.grid_forget()
     #-----------------------------------------
     def firstFrame_button_event(self):
         self.select_frame_by_name("firstFrame")
@@ -214,6 +258,18 @@ class App(customtkinter.CTk):
         self.select_frame_by_name("fifthFrame")
     def sixthFrame_button_event(self):
         self.select_frame_by_name("sixthFrame")
+    def seventhFrame_button_event(self):
+        self.select_frame_by_name("seventhFrame")
+    def eighthFrame_button_event(self):
+        self.select_frame_by_name("eighthFrame")
+    def ninthFrame_button_event(self):
+        self.select_frame_by_name("ninthFrame")
+    def tenthFrame_button_event(self):
+        self.select_frame_by_name("tenthFrame")
+    def eleventhFrame_button_event(self):
+        self.select_frame_by_name("eleventhFrame")
+    def twelvethFrame_button_event(self):
+        self.select_frame_by_name("twelvethFrame")
 
     def create_gui_elements(self, frame_name , frame_label):
         frame_name.grid_columnconfigure(0, weight=1)
