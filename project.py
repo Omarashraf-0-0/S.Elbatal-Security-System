@@ -8,6 +8,7 @@ from PIL import Image
 class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
+
         self.title("Home")
         self.geometry("900x500")
         Font = customtkinter.CTkFont(family="Georgia", size=40, weight="bold")
@@ -40,35 +41,53 @@ class App(customtkinter.CTk):
                                                     text="Second way",
                                                     fg_color="transparent", text_color=("gray10", "gray90"),
                                                     hover_color=("gray70", "gray30"),
-                                                    image=self.logo_image, anchor="w")  # , command=self.first_button)
+
+                                                    image=self.logo_image, anchor="w" , command=self.secondFrame_button_event)
+
         self.secondButton.grid(row=1, column=1, sticky="ew" , pady=5)
         self.thirdButton = customtkinter.CTkButton(self.navigation_frame, corner_radius=0, height=40,
                                                     border_spacing=10,
                                                     text="third way",
                                                     fg_color="transparent", text_color=("gray10", "gray90"),
                                                     hover_color=("gray70", "gray30"),
-                                                    image=self.logo_image, anchor="w")  # , command=self.first_button)
+
+                                                    image=self.logo_image, anchor="w", command=self.thirdFrame_button_event)
+
+                                                 
+
         self.thirdButton.grid(row=2, column=0, sticky="ew" , pady=5)
         self.fourthButton = customtkinter.CTkButton(self.navigation_frame, corner_radius=0, height=40,
                                                    border_spacing=10,
                                                    text="fourth way",
                                                    fg_color="transparent", text_color=("gray10", "gray90"),
                                                    hover_color=("gray70", "gray30"),
-                                                   image=self.logo_image, anchor="w")  # , command=self.first_button)
+
+                                                   image=self.logo_image, anchor="w", command= self.fourthFrame_button_event)
+
+                                             
+
         self.fourthButton.grid(row=2, column=1, sticky="ew" , pady=5)
         self.fifthButton = customtkinter.CTkButton(self.navigation_frame, corner_radius=0, height=40,
                                                    border_spacing=10,
                                                    text="third way",
                                                    fg_color="transparent", text_color=("gray10", "gray90"),
                                                    hover_color=("gray70", "gray30"),
-                                                   image=self.logo_image, anchor="w")  # , command=self.first_button)
+
+                                                   image=self.logo_image, anchor="w", command=self.fifthFrame_button_event)
+
+                                                  
+
         self.fifthButton.grid(row=3, column=0, sticky="ew", pady=5)
         self.sixthButton = customtkinter.CTkButton(self.navigation_frame, corner_radius=0, height=40,
                                                     border_spacing=10,
                                                     text="third way",
                                                     fg_color="transparent", text_color=("gray10", "gray90"),
                                                     hover_color=("gray70", "gray30"),
-                                                    image=self.logo_image, anchor="w")  # , command=self.first_button)
+
+                                                    image=self.logo_image, anchor="w", command=self.sixthFrame_button_event)
+
+                                                  
+
         self.sixthButton.grid(row=3, column=1, sticky="ew", pady=5)
         self.sevenButton = customtkinter.CTkButton(self.navigation_frame, corner_radius=0, height=40,
                                                    border_spacing=10,
@@ -119,33 +138,21 @@ class App(customtkinter.CTk):
         # ================> end of navigation <=================
         # ================> Frames Creation <===================
         self.firstFrame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
-        self.firstFrame.grid_columnconfigure(0, weight=1)
-        self.firstFrame.grid_rowconfigure(6,weight=1)
 
-        self.firstFrame_label = customtkinter.CTkLabel(self.firstFrame, text="First Way" , font=Font)       #, image=self.large_test_image)
-        self.firstFrame_label.grid(row=0, column=0, padx=20, pady=40 , columnspan = 2 )
-        self.radio_var = tkinter.IntVar(value=0)
-        self.encryptionRadio = customtkinter.CTkRadioButton(master=self.firstFrame, variable=self.radio_var,value=0 , text = "Encryption")
-        self.encryptionRadio.grid(row=1, column=0, pady=0, padx=00, sticky="s")
-        self.decryptionRadio = customtkinter.CTkRadioButton(master=self.firstFrame, variable=self.radio_var, value=1 , text = "Decryption")
-        self.decryptionRadio.grid(row=1, column=1, pady=0, padx=100, sticky="w")
-        self.encryptTextbox = customtkinter.CTkEntry(self.firstFrame, placeholder_text="Encryption" , height= 50 , width= 50 )
-        self.encryptTextbox.grid(row=2, column=0, padx=(20, 20), pady=(20, 20), sticky="nsew" )
-        self.decryptTextbox = customtkinter.CTkEntry(self.firstFrame, placeholder_text="Decryption" , height= 50 , width= 50)
-        self.decryptTextbox.grid(row=2, column=1, padx=(20, 20), pady=(20, 20), sticky="nsew")
-        self.processButton = customtkinter.CTkButton(self.firstFrame, corner_radius=0, height=40,
-                                                    border_spacing=10,text="Process",fg_color="transparent", text_color=("gray10", "gray90"),
-                                                    hover_color=("gray70", "gray30"),image=self.logo_image, anchor="w")  # , command=self.first_button)
-        self.processButton.grid(row=3, column=0, sticky="s", pady=5 , columnspan = 2)
+        self.secondFrame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
+        self.thirdFrame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
+        self.fourthFrame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
+        self.fifthFrame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
+        self.sixthFrame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
 
-        self.selectFileButton = customtkinter.CTkButton(self.firstFrame, text="Select File", width= 300 , height= 40 , command=self.select_file)
+        self.create_gui_elements(self.firstFrame,"firstWay")
+        self.create_gui_elements(self.secondFrame,"second way")
+        self.create_gui_elements(self.thirdFrame, "thirdFrame way")
+        self.create_gui_elements(self.fourthFrame, "fourthFrame way")
+        self.create_gui_elements(self.fifthFrame, "fifthFrame way")
+        self.create_gui_elements(self.sixthFrame, "sixthFrame way")
 
-        self.selectFileButton.grid(row=4, column=0, sticky="s", pady=5 , columnspan = 2 )
-        self.downloadFileButton = customtkinter.CTkButton(self.firstFrame, text="Download File", width= 300 , height= 40 )
-        # command=self.select_file)
-        self.downloadFileButton.grid(row=5, column=0, sticky="s", pady=5 , columnspan= 2)
-        # self.encryptTextbox = customtkinter.CTkTextbox(self.firstFrame, width=50 , height=40)
-        # self.encryptTextbox.grid(row=2, column=0, padx=10, pady=0, sticky="nsew")
+       
         self.select_frame_by_name("firstFrame")
         #==> Functions
     def change_appearance_mode_event(self, new_appearance_mode):
@@ -153,18 +160,96 @@ class App(customtkinter.CTk):
 #________________________________________
     def select_frame_by_name(self, name):
         # set button color for selected button
-        self.firstButton.configure(fg_color=("gray75", "gray25") if name == "home" else "transparent")
-        # self.frame_2_button.configure(fg_color=("gray75", "gray25") if name == "frame_2" else "transparent")
-        # self.frame_3_button.configure(fg_color=("gray75", "gray25") if name == "frame_3" else "transparent")
+
+        self.firstButton.configure(fg_color=("gray75", "gray25") if name == "firstFrame" else "transparent")
+        self.secondButton.configure(fg_color=("gray75", "gray25") if name == "secondFrame" else "transparent")
+        self.thirdButton.configure(fg_color=("gray75", "gray25") if name == "thirdFrame" else "transparent")
+        self.fourthButton.configure(fg_color=("gray75", "gray25") if name == "fourthFrame" else "transparent")
+        self.fifthButton.configure(fg_color=("gray75", "gray25") if name == "fifthFrame" else "transparent")
+        self.sixthButton.configure(fg_color=("gray75", "gray25") if name == "sixthFrame" else "transparent")
+      
+
 
         # show selected frame
         if name == "firstFrame":
             self.firstFrame.grid(row=0, column=1, sticky="nsew")
         else:
             self.firstFrame.grid_forget()
+
+
+        if name == "secondFrame":
+                self.secondFrame.grid(row=0, column=1, sticky="nsew")
+        else:
+                self.secondFrame.grid_forget()
+
+        if name == "thirdFrame":
+            self.thirdFrame.grid(row=0, column=1, sticky="nsew")
+        else:
+            self.thirdFrame.grid_forget()
+
+        if name == "fourthFrame":
+                self.fourthFrame.grid(row=0, column=1, sticky="nsew")
+        else:
+                self.fourthFrame.grid_forget()
+
+        if name == "fifthFrame":
+                self.fifthFrame.grid(row=0, column=1, sticky="nsew")
+        else:
+                self.fifthFrame.grid_forget()
+
+        if name == "sixthFrame":
+                self.sixthFrame.grid(row=0, column=1, sticky="nsew")
+        else:
+                self.sixthFrame.grid_forget()
     #-----------------------------------------
     def firstFrame_button_event(self):
         self.select_frame_by_name("firstFrame")
+    def secondFrame_button_event(self):
+        self.select_frame_by_name("secondFrame")
+    def thirdFrame_button_event(self):
+        self.select_frame_by_name("thirdFrame")
+    def fourthFrame_button_event(self):
+        self.select_frame_by_name("fourthFrame")
+    def fifthFrame_button_event(self):
+        self.select_frame_by_name("fifthFrame")
+    def sixthFrame_button_event(self):
+        self.select_frame_by_name("sixthFrame")
+
+    def create_gui_elements(self, frame_name , frame_label):
+        frame_name.grid_columnconfigure(0, weight=1)
+        frame_name.grid_rowconfigure(6, weight=1)
+
+        Font = ("Arial", 12)  # Assuming Font is defined somewhere
+
+        Frame_label = customtkinter.CTkLabel(frame_name, text=frame_label, font=Font)
+        Frame_label.grid(row=0, column=0, padx=20, pady=40, columnspan=2)
+
+        radio_var = customtkinter.IntVar(value=0)
+        encryptionRadio = customtkinter.CTkRadioButton(master=frame_name, variable=radio_var, value=0, text="Encryption")
+        encryptionRadio.grid(row=1, column=0, pady=0, padx=0, sticky="s")
+        decryptionRadio = customtkinter.CTkRadioButton(master=frame_name, variable=radio_var, value=1, text="Decryption")
+        decryptionRadio.grid(row=1, column=1, pady=0, padx=100, sticky="w")
+
+        encryptTextbox = customtkinter.CTkEntry(frame_name, placeholder_text="Encryption", height=50, width=50)
+        encryptTextbox.grid(row=2, column=0, padx=(20, 20), pady=(20, 20), sticky="nsew")
+        decryptTextbox = customtkinter.CTkEntry(frame_name, placeholder_text="Decryption", height=50, width=50)
+        decryptTextbox.grid(row=2, column=1, padx=(20, 20), pady=(20, 20), sticky="nsew")
+
+        processButton = customtkinter.CTkButton(frame_name, corner_radius=0, height=40, border_spacing=10, text="Process",
+                                                fg_color="transparent", text_color=("gray10", "gray90"),
+                                                hover_color=("gray70", "gray30"), anchor="w")
+        processButton.grid(row=3, column=0, sticky="s", pady=5, columnspan=2)
+
+        selectFileButton = customtkinter.CTkButton(frame_name, text="Select File", width=300, height=40,
+                                                   command=self.select_file)
+        selectFileButton.grid(row=4, column=0, sticky="s", pady=5, columnspan=2)
+
+        downloadFileButton = customtkinter.CTkButton(frame_name, text="Download File", width=300, height=40)
+        downloadFileButton.grid(row=5, column=0, sticky="s", pady=5, columnspan=2)
+
+    
+  
+
 
 
     def select_file(self):
@@ -196,4 +281,3 @@ class App(customtkinter.CTk):
 if __name__ == "__main__":
     app = App()
     app.mainloop()
-
