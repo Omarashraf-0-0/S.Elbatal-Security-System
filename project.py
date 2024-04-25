@@ -132,9 +132,9 @@ class App(customtkinter.CTk):
                                                     image=self.logo_image, anchor="w")  # , command=self.first_button)
         self.twelveButton.grid(row=6, column=1, sticky="ew", pady=5)
         self.appearance_mode_menu = customtkinter.CTkOptionMenu(self.navigation_frame,
-                                                                values=["Light", "Dark", "System"],
+                                                                values=[ "Dark","Light", "System"],
                                                                 command=self.change_appearance_mode_event)
-        self.appearance_mode_menu.grid(row=7, column=0, padx=0, pady=10, sticky="n" , columnspan=2)
+        self.appearance_mode_menu.grid(row=7, column=0, padx=0, pady=10, sticky="n" , columnspan=2   )
         # ================> end of navigation <=================
         # ================> Frames Creation <===================
         self.firstFrame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
@@ -219,7 +219,7 @@ class App(customtkinter.CTk):
         frame_name.grid_columnconfigure(0, weight=1)
         frame_name.grid_rowconfigure(6, weight=1)
 
-        Font = ("Arial", 12)  # Assuming Font is defined somewhere
+        Font = ("Arial", 40)  # Assuming Font is defined somewhere
 
         Frame_label = customtkinter.CTkLabel(frame_name, text=frame_label, font=Font)
         Frame_label.grid(row=0, column=0, padx=20, pady=40, columnspan=2)
