@@ -79,16 +79,15 @@ class App(customtkinter.CTk):
                                                    command=self.Transposition_button_event)
 
         self.fifthButton.grid(row=3, column=0, sticky="ew", pady=5)
-        self.sixthButton = customtkinter.CTkButton(self.navigation_frame, corner_radius=0, height=40,
+        self.Rot13Button = customtkinter.CTkButton(self.navigation_frame, corner_radius=0, height=40,
                                                    border_spacing=10,
-                                                   text="third way",
+                                                   text="Rot 13",
                                                    fg_color="transparent", text_color=("gray10", "gray90"),
                                                    hover_color=("gray70", "gray30"),
 
                                                    image=self.logo_image, anchor="w",
-                                                   command=self.sixthFrame_button_event)
-
-        self.sixthButton.grid(row=3, column=1, sticky="ew", pady=5)
+                                                   command=self.Rot13_button_event)
+        self.Rot13Button.grid(row=3, column=1, sticky="ew", pady=5)
         self.sevenButton = customtkinter.CTkButton(self.navigation_frame, corner_radius=0, height=40,
                                                    border_spacing=10,
                                                    text="third way",
@@ -154,7 +153,7 @@ class App(customtkinter.CTk):
         self.RailFence = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.Affine = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.fifthFrame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
-        self.sixthFrame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
+        self.Rot13 = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.seventhFrame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.eighthFrame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.ninthFrame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
@@ -164,22 +163,27 @@ class App(customtkinter.CTk):
         self.create_gui_elements(self.ceaser, "Ceaser")
         self.create_gui_elements(self.playFair, "play Fair")
         self.create_gui_elements(self.RailFence, "Rail Fence")
-        self.create_gui_elements(self.thirdFrame, "thirdFrame way")
         self.create_gui_elements(self.Affine, "Affine")
+
+        self.create_gui_elements(self.Rot13, "Rot13")
+
         self.create_gui_elements(self.Transposition, "Transposition")
-        self.create_gui_elements(self.sixthFrame, "sixthFrame way")
         self.create_gui_elements(self.seventhFrame, "seventh way")
         self.create_gui_elements(self.eighthFrame, "eighth way")
         self.create_gui_elements(self.ninthFrame, "ninth way")
         self.create_gui_elements(self.tenthFrame, "tenth way")
         self.create_gui_elements(self.eleventhFrame, "eleventh way")
         self.create_gui_elements(self.twelvethFrame, "twelveth way")
+        self.Rot13.keyTextBox.configure(state="readonly")
+#==============> Edit process button name
+
         self.bind_update_process_button_text(self.ceaser)
         self.bind_update_process_button_text(self.playFair)
         self.bind_update_process_button_text(self.Affine)
+        self.bind_update_process_button_text(self.fifthFrame)
+        self.bind_update_process_button_text(self.Rot13)
         self.bind_update_process_button_text(self.Transposition)
         self.bind_update_process_button_text(self.RailFence)
-        self.bind_update_process_button_text(self.sixthFrame)
         self.bind_update_process_button_text(self.seventhFrame)
         self.bind_update_process_button_text(self.eighthFrame)
         self.bind_update_process_button_text(self.ninthFrame)
@@ -191,6 +195,7 @@ class App(customtkinter.CTk):
         self.playFair.processButton.configure(command=self.playFairFunction)
 
         self.Affine.processButton.configure(command=self.AffineFunction)
+        self.Rot13.processButton.configure(command=self.Rot13Function)
         self.Transposition.processButton.configure(command=self.TranspositionFunction)
 
         self.RailFence.processButton.configure(command = self.RailFenceButtonClicked)
@@ -597,7 +602,45 @@ class App(customtkinter.CTk):
         return decrypted_text
 
     # ---------------------------------------------
+    def Rot13Function(self):
+        # Get the ciphertext and key from the input fields
+        self.Rot13.keyTextBox.configure(state="readonly")
+        self.Rot13.decryptTextBox.delete(0,"end")
+        PlainText = self.Rot13.encryptTextBox.get()
+        rVar = self.Rot13.radioVar.get()
 
+        if rVar == 0 :
+             decryptedText = self.Rot13encrypt(PlainText)
+             self.Rot13.decryptTextBox.insert("end", decryptedText)
+        else :
+            encryptedText = self.Rot13decrypt(PlainText)
+            self.Rot13.decryptTextBox.insert("end", encryptedText)
+
+    def Rot13encrypt(self,Plaintext):
+        translated = ''
+        for char in Plaintext:
+            if char.isalpha():
+                if char.isupper():
+                    translated += chr(((ord(char) - 65 + 13) % 26) + 65)
+                elif char.islower():
+                    translated += chr(((ord(char) - 97 + 13) % 26) + 97)
+            else:
+                translated += char
+        return translated
+
+    def Rot13decrypt(self,cipher_text):
+        decrypted = ''
+        for char in cipher_text:
+            if char.isalpha():
+                if char.isupper():
+                    decrypted += chr(((ord(char) - 65 - 13) % 26) + 65)
+                elif char.islower():
+                    decrypted += chr(((ord(char) - 97 - 13) % 26) + 97)
+            else:
+                decrypted += char
+        return decrypted
+
+    # ================================================================
 
     def select_frame_by_name(self, name):
         # set button color for selected button
@@ -609,7 +652,8 @@ class App(customtkinter.CTk):
         self.fifthButton.configure(fg_color=("gray75", "gray25") if name == "Transposition" else "transparent")
         self.RailFenceButton.configure(fg_color=("gray75", "gray25") if name == "RailFence" else "transparent")
     
-        self.sixthButton.configure(fg_color=("gray75", "gray25") if name == "sixthFrame" else "transparent")
+        self.Rot13Button.configure(fg_color=("gray75", "gray25") if name == "Rot13" else "transparent")
+
         self.sevenButton.configure(fg_color=("gray75", "gray25") if name == "seventhFrame" else "transparent")
         self.eightButton.configure(fg_color=("gray75", "gray25") if name == "eighthFrame" else "transparent")
         self.nineButton.configure(fg_color=("gray75", "gray25") if name == "ninthFrame" else "transparent")
@@ -644,10 +688,10 @@ class App(customtkinter.CTk):
         else:
             self.Transposition.grid_forget()
 
-        if name == "sixthFrame":
-            self.sixthFrame.grid(row=0, column=1, sticky="nsew")
+        if name == "Rot13":
+            self.Rot13.grid(row=0, column=1, sticky="nsew")
         else:
-            self.sixthFrame.grid_forget()
+            self.Rot13.grid_forget()
 
         if name == "seventhFrame":
             self.seventhFrame.grid(row=0, column=1, sticky="nsew")
@@ -692,8 +736,8 @@ class App(customtkinter.CTk):
     def Transposition_button_event(self):
         self.select_frame_by_name("Transposition")
 
-    def sixthFrame_button_event(self):
-        self.select_frame_by_name("sixthFrame")
+    def Rot13_button_event(self):
+        self.select_frame_by_name("Rot13")
     def seventhFrame_button_event(self):
         self.select_frame_by_name("seventhFrame")
     def eighthFrame_button_event(self):
