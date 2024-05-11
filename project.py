@@ -49,16 +49,16 @@ class App(customtkinter.CTk):
                                                     command=self.playFair_button_event)
 
         self.secondButton.grid(row=1, column=1, sticky="ew", pady=5)
-        self.thirdButton = customtkinter.CTkButton(self.navigation_frame, corner_radius=0, height=40,
+        self.RailFenceButton = customtkinter.CTkButton(self.navigation_frame, corner_radius=0, height=40,
                                                    border_spacing=10,
-                                                   text="third way",
+                                                   text="Rail Fence",
                                                    fg_color="transparent", text_color=("gray10", "gray90"),
                                                    hover_color=("gray70", "gray30"),
 
                                                    image=self.logo_image, anchor="w",
-                                                   command=self.thirdFrame_button_event)
+                                                   command=self.RailFence_button_event)
 
-        self.thirdButton.grid(row=2, column=0, sticky="ew", pady=5)
+        self.RailFenceButton.grid(row=2, column=0, sticky="ew", pady=5)
         self.fourthButton = customtkinter.CTkButton(self.navigation_frame, corner_radius=0, height=40,
                                                     border_spacing=10,
                                                     text="Affine",
@@ -151,6 +151,9 @@ class App(customtkinter.CTk):
         self.thirdFrame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.Affine = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.Transposition = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
+        self.RailFence = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
+        self.Affine = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
+        self.fifthFrame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.sixthFrame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.seventhFrame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.eighthFrame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
@@ -158,9 +161,9 @@ class App(customtkinter.CTk):
         self.tenthFrame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.eleventhFrame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.twelvethFrame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
-
         self.create_gui_elements(self.ceaser, "Ceaser")
         self.create_gui_elements(self.playFair, "play Fair")
+        self.create_gui_elements(self.RailFence, "Rail Fence")
         self.create_gui_elements(self.thirdFrame, "thirdFrame way")
         self.create_gui_elements(self.Affine, "Affine")
         self.create_gui_elements(self.Transposition, "Transposition")
@@ -171,13 +174,11 @@ class App(customtkinter.CTk):
         self.create_gui_elements(self.tenthFrame, "tenth way")
         self.create_gui_elements(self.eleventhFrame, "eleventh way")
         self.create_gui_elements(self.twelvethFrame, "twelveth way")
-
-#==============> Edit process button name
         self.bind_update_process_button_text(self.ceaser)
         self.bind_update_process_button_text(self.playFair)
-        self.bind_update_process_button_text(self.thirdFrame)
         self.bind_update_process_button_text(self.Affine)
         self.bind_update_process_button_text(self.Transposition)
+        self.bind_update_process_button_text(self.RailFence)
         self.bind_update_process_button_text(self.sixthFrame)
         self.bind_update_process_button_text(self.seventhFrame)
         self.bind_update_process_button_text(self.eighthFrame)
@@ -188,8 +189,11 @@ class App(customtkinter.CTk):
 #================================================================>>
         self.ceaser.processButton.configure(command=self.ceaserprocess_button_click)
         self.playFair.processButton.configure(command=self.playFairFunction)
+
         self.Affine.processButton.configure(command=self.AffineFunction)
         self.Transposition.processButton.configure(command=self.TranspositionFunction)
+
+        self.RailFence.processButton.configure(command = self.RailFenceButtonClicked)
         #Select first frame as a default ============================================
         self.select_frame_by_name("ceaser")
 
@@ -275,6 +279,20 @@ class App(customtkinter.CTk):
             msg = msg[: -null_count]
         return msg
 
+        def ceaserprocess_button_click(self):
+            # Get the ciphertext and key from the input fields
+            PTxt = self.ceaser.encryptTextBox.get()
+            K = self.ceaser.keyTextBox.get()
+            CTxt = self.ceaser.decryptTextBox.get()
+            rVar = self.ceaser.radioVar.get()
+            # Perform decryption
+            if rVar == 0:
+                decryptedText = self.CeaserEncryption(PTxt, int(K))
+                self.ceaser.decryptTextBox.insert("end", decryptedText)
+            else:
+                encryptedText = self.CeaserDecryption(CTxt, int(K))
+                self.ceaser.encryptTextBox.insert("end", encryptedText)
+
     def AffineFunction(self):#function
         # Get the ciphertext and key from the input fields
         self.Affine.decryptTextBox.delete(0, "end")
@@ -306,6 +324,15 @@ class App(customtkinter.CTk):
             else:
                 Text = self.columnar_transposition_decrypt(PTxt, k)
                 self.Transposition.decryptTextBox.insert("end", Text)
+
+
+        # Perform decryption
+        if rVar == 0:
+            Text = self.encryptAffine(PTxt,k)
+            self.Affine.decryptTextBox.insert("end", Text)
+        else:
+            Text = self.decryptAffine(PTxt, k)
+            self.Affine.decryptTextBox.insert("end", Text)
 
     def inverse(self,b):
         # T = T1 - (T2 * Q)
@@ -489,7 +516,87 @@ class App(customtkinter.CTk):
 
     # ________________________________________
 
+    def RailFenceButtonClicked(self):
+        # Get the ciphertext and key from the input fields
+        self.RailFence.decryptTextBox.delete(0,"end")
+        PlainText = self.RailFence.encryptTextBox.get()
+        Key = self.RailFence.keyTextBox.get()
+        rVar = self.RailFence.radioVar.get()
 
+        if rVar == 0 :
+             decryptedText = self.rail_fence_encrypt(PlainText, int(Key))
+             self.RailFence.decryptTextBox.insert("end", decryptedText)
+        else :
+            encryptedText = self.rail_fence_decrypt(PlainText, int(Key))
+            self.RailFence.decryptTextBox.insert("end", encryptedText)
+
+    def rail_fence_encrypt(self,plaintext, rails):
+        rails = int(rails)
+        fence = [[] for _ in range(rails)]  # Create a list of empty lists to represent the fence
+        rail = 0
+        direction = 1  # Direction of movement along the rails (down or up)
+        space_indices = [i for i, char in enumerate(plaintext) if char == ' ']  # Store the indices of spaces
+
+        # Fill the fence with characters from the plaintext
+        for char in plaintext:
+            if char == ' ':
+                continue
+            fence[rail].append(char)
+            rail += direction
+            if rail == rails - 1 or rail == 0:
+                direction *= -1  # Change direction when reaching the top or bottom rail
+
+        # Flatten the fence and concatenate the characters
+        encrypted_text = ''.join(char for rail in fence for char in rail)
+
+        # Add the spaces back into the encrypted text
+        for index in space_indices:
+            encrypted_text = encrypted_text[:index] + ' ' + encrypted_text[index:]
+
+        return encrypted_text
+
+    def rail_fence_decrypt(self,ciphertext, rails):
+        rails = int(rails)
+        fence = [['' for _ in ciphertext] for _ in range(rails)]  # Create an empty fence matrix
+        rail = 0
+        direction = 1
+        space_indices = [i for i, char in enumerate(ciphertext) if char == ' ']  # Store the indices of spaces
+
+        # Remove spaces from ciphertext
+        ciphertext = ciphertext.replace(' ', '')
+
+        # Fill the fence matrix with placeholders for characters
+        for i in range(len(ciphertext)):
+            fence[rail][i] = '*'
+            rail += direction
+            if rail == rails - 1 or rail == 0:
+                direction *= -1
+
+        # Fill the fence matrix with ciphertext characters
+        index = 0
+        for i in range(rails):
+            for j in range(len(ciphertext)):
+                if fence[i][j] == '*':
+                    fence[i][j] = ciphertext[index]
+                    index += 1
+
+        # Read the characters from the fence matrix to retrieve the plaintext
+        rail = 0
+        direction = 1
+        decrypted_text = ''
+        for i in range(len(ciphertext)):
+            decrypted_text += fence[rail][i]
+            rail += direction
+            if rail == rails - 1 or rail == 0:
+                direction *= -1
+
+        # Add the spaces back into the decrypted text
+        for index in space_indices:
+            decrypted_text = decrypted_text[:index] + ' ' + decrypted_text[index:]
+
+        return decrypted_text
+
+    # ---------------------------------------------
 
 
     def select_frame_by_name(self, name):
@@ -497,9 +604,11 @@ class App(customtkinter.CTk):
 
         self.firstButton.configure(fg_color=("gray75", "gray25") if name == "ceaser" else "transparent")
         self.secondButton.configure(fg_color=("gray75", "gray25") if name == "playFair" else "transparent")
-        self.thirdButton.configure(fg_color=("gray75", "gray25") if name == "thirdFrame" else "transparent")
+
         self.fourthButton.configure(fg_color=("gray75", "gray25") if name == "Affine" else "transparent")
         self.fifthButton.configure(fg_color=("gray75", "gray25") if name == "Transposition" else "transparent")
+        self.RailFenceButton.configure(fg_color=("gray75", "gray25") if name == "RailFence" else "transparent")
+    
         self.sixthButton.configure(fg_color=("gray75", "gray25") if name == "sixthFrame" else "transparent")
         self.sevenButton.configure(fg_color=("gray75", "gray25") if name == "seventhFrame" else "transparent")
         self.eightButton.configure(fg_color=("gray75", "gray25") if name == "eighthFrame" else "transparent")
@@ -520,10 +629,10 @@ class App(customtkinter.CTk):
         else:
             self.playFair.grid_forget()
 
-        if name == "thirdFrame":
-            self.thirdFrame.grid(row=0, column=1, sticky="nsew")
+        if name == "RailFence":
+            self.RailFence.grid(row=0, column=1, sticky="nsew")
         else:
-            self.thirdFrame.grid_forget()
+            self.RailFence.grid_forget()
 
         if name == "Affine":
             self.Affine.grid(row=0, column=1, sticky="nsew")
@@ -574,8 +683,8 @@ class App(customtkinter.CTk):
         self.select_frame_by_name("playFair")
 
 
-    def thirdFrame_button_event(self):
-        self.select_frame_by_name("thirdFrame")
+    def RailFence_button_event(self):
+        self.select_frame_by_name("RailFence")
 
     def Affine_button_event(self):
         self.select_frame_by_name("Affine")
