@@ -60,12 +60,12 @@ class App(customtkinter.CTk):
         self.thirdButton.grid(row=2, column=0, sticky="ew", pady=5)
         self.fourthButton = customtkinter.CTkButton(self.navigation_frame, corner_radius=0, height=40,
                                                     border_spacing=10,
-                                                    text="fourth way",
+                                                    text="Affine",
                                                     fg_color="transparent", text_color=("gray10", "gray90"),
                                                     hover_color=("gray70", "gray30"),
 
                                                     image=self.logo_image, anchor="w",
-                                                    command=self.fourthFrame_button_event)
+                                                    command=self.Affine_button_event)
 
         self.fourthButton.grid(row=2, column=1, sticky="ew", pady=5)
         self.fifthButton = customtkinter.CTkButton(self.navigation_frame, corner_radius=0, height=40,
@@ -148,7 +148,7 @@ class App(customtkinter.CTk):
         self.ceaser = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.playFair = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.thirdFrame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
-        self.fourthFrame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
+        self.Affine = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.fifthFrame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.sixthFrame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.seventhFrame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
@@ -161,7 +161,7 @@ class App(customtkinter.CTk):
         self.create_gui_elements(self.ceaser, "Ceaser")
         self.create_gui_elements(self.playFair, "play Fair")
         self.create_gui_elements(self.thirdFrame, "thirdFrame way")
-        self.create_gui_elements(self.fourthFrame, "fourthFrame way")
+        self.create_gui_elements(self.Affine, "Affine")
         self.create_gui_elements(self.fifthFrame, "fifthFrame way")
         self.create_gui_elements(self.sixthFrame, "sixthFrame way")
         self.create_gui_elements(self.seventhFrame, "seventh way")
@@ -175,7 +175,7 @@ class App(customtkinter.CTk):
         self.bind_update_process_button_text(self.ceaser)
         self.bind_update_process_button_text(self.playFair)
         self.bind_update_process_button_text(self.thirdFrame)
-        self.bind_update_process_button_text(self.fourthFrame)
+        self.bind_update_process_button_text(self.Affine)
         self.bind_update_process_button_text(self.fifthFrame)
         self.bind_update_process_button_text(self.sixthFrame)
         self.bind_update_process_button_text(self.seventhFrame)
@@ -187,6 +187,7 @@ class App(customtkinter.CTk):
 #================================================================>>
         self.ceaser.processButton.configure(command=self.ceaserprocess_button_click)
         self.playFair.processButton.configure(command=self.playFairFunction)
+        self.Affine.processButton.configure(command=self.AffineFunction)
         #Select first frame as a default ============================================
         self.select_frame_by_name("ceaser")
 
@@ -206,7 +207,66 @@ class App(customtkinter.CTk):
             encryptedText = self.CeaserDecryption(CTxt, int(K))
             self.ceaser.encryptTextBox.insert("end", encryptedText)
 
+    def AffineFunction(self):#function
+        # Get the ciphertext and key from the input fields
+        self.Affine.decryptTextBox.delete(0, "end")
+        PTxt = self.Affine.encryptTextBox.get()
+        k = [int(i) for i in self.Affine.keyTextBox.get().split(',')]
 
+        rVar = self.Affine.radioVar.get()
+
+        # Perform decryption
+        if rVar == 0:
+            Text = self.encryptAffine(PTxt,k)
+            self.Affine.decryptTextBox.insert("end", Text)
+        else:
+            Text = self.decryptAffine(PTxt, k)
+            self.Affine.decryptTextBox.insert("end", Text)
+
+    def inverse(self,b):
+        # T = T1 - (T2 * Q)
+        # Q , A, B, r, T1, T2, T
+        t1, t2 = 0, 1
+        ans = 0
+        a = 26
+        while b != 0:
+            q = int(a / b);
+            r = a % b;
+            t = t1 - (t2 * q)
+            if r == 0:
+                ans = t2
+                break
+            a, b = b, r
+            t1, t2 = t2, t
+
+        if ans < 0:
+            return ans + 26
+        else:
+            return ans
+
+    def decryptAffine(self,cipher, key):
+        inv = self.inverse(key[0])
+        decryptedText = ''
+        for i in range(len(cipher)):
+            if cipher[i] >= 'A' and cipher[i] <= 'Z':
+                decryptedText += chr(((inv * ((ord(cipher[i]) - ord('A')) - key[1])) % 26) + ord('A'))
+            elif cipher[i] >= 'a' and cipher[i] <= 'z':
+                decryptedText += chr(((inv * ((ord(cipher[i]) - ord('a')) - key[1])) % 26) + ord('a'))
+            else:
+                decryptedText += ' '
+        return decryptedText
+
+    def encryptAffine(self,text, key):
+        # c = (ax + b) mod 26
+        encryptedText = ""
+        for i in range(len(text)):
+            if text[i] >= 'A' and text[i] <= 'Z':
+                encryptedText += chr((((key[0] * (ord(text[i]) - ord('A'))) + key[1]) % 26) + ord('A'))
+            elif text[i] >= 'a' and text[i] <= 'z':
+                encryptedText += chr((((key[0] * (ord(text[i]) - ord('a'))) + key[1]) % 26) + ord('a'))
+            else:
+                encryptedText += ' '
+        return encryptedText
     def bind_update_process_button_text(self, frame):
             frame.radioVar.trace("w", lambda *args, f=frame: self.update_process_button_text(f))
 
@@ -354,7 +414,7 @@ class App(customtkinter.CTk):
         self.firstButton.configure(fg_color=("gray75", "gray25") if name == "ceaser" else "transparent")
         self.secondButton.configure(fg_color=("gray75", "gray25") if name == "playFair" else "transparent")
         self.thirdButton.configure(fg_color=("gray75", "gray25") if name == "thirdFrame" else "transparent")
-        self.fourthButton.configure(fg_color=("gray75", "gray25") if name == "fourthFrame" else "transparent")
+        self.fourthButton.configure(fg_color=("gray75", "gray25") if name == "Affine" else "transparent")
         self.fifthButton.configure(fg_color=("gray75", "gray25") if name == "fifthFrame" else "transparent")
         self.sixthButton.configure(fg_color=("gray75", "gray25") if name == "sixthFrame" else "transparent")
         self.sevenButton.configure(fg_color=("gray75", "gray25") if name == "seventhFrame" else "transparent")
@@ -381,10 +441,10 @@ class App(customtkinter.CTk):
         else:
             self.thirdFrame.grid_forget()
 
-        if name == "fourthFrame":
-            self.fourthFrame.grid(row=0, column=1, sticky="nsew")
+        if name == "Affine":
+            self.Affine.grid(row=0, column=1, sticky="nsew")
         else:
-            self.fourthFrame.grid_forget()
+            self.Affine.grid_forget()
 
         if name == "fifthFrame":
             self.fifthFrame.grid(row=0, column=1, sticky="nsew")
@@ -433,8 +493,8 @@ class App(customtkinter.CTk):
     def thirdFrame_button_event(self):
         self.select_frame_by_name("thirdFrame")
 
-    def fourthFrame_button_event(self):
-        self.select_frame_by_name("fourthFrame")
+    def Affine_button_event(self):
+        self.select_frame_by_name("Affine")
 
     def fifthFrame_button_event(self):
         self.select_frame_by_name("fifthFrame")
@@ -532,6 +592,14 @@ class App(customtkinter.CTk):
         frame_name.radioVar = radio_var
 
 
+    def select_file(self,frameName):
+        filename = filedialog.askopenfilename(title="Select file to add")
+        if filename:
+            try:
+                with open(filename, "r") as file:
+                    frameName.file_content = file.read()
+            except Exception as e:
+                print("Error:", e)
 
     def select_file(self):
         filename = filedialog.askopenfilename(title="Select file to add")
