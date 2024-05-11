@@ -161,7 +161,6 @@ class App(customtkinter.CTk):
         self.create_gui_elements(self.ceaser, "Ceaser")
         self.create_gui_elements(self.playFair, "play Fair")
         self.create_gui_elements(self.RailFence, "Rail Fence")
-        self.create_gui_elements(self.thirdFrame, "thirdFrame way")
         self.create_gui_elements(self.Affine, "Affine")
         self.create_gui_elements(self.fifthFrame, "fifthFrame way")
         self.create_gui_elements(self.sixthFrame, "sixthFrame way")
