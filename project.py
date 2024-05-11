@@ -1,9 +1,10 @@
 import tkinter
 from tkinter import filedialog, messagebox
-
+import numpy as np
 import customtkinter
 import os
 from PIL import Image
+import random
 import math
 
 class App(customtkinter.CTk):
@@ -88,31 +89,30 @@ class App(customtkinter.CTk):
                                                    image=self.logo_image, anchor="w",
                                                    command=self.Rot13_button_event)
         self.Rot13Button.grid(row=3, column=1, sticky="ew", pady=5)
-        self.sevenButton = customtkinter.CTkButton(self.navigation_frame, corner_radius=0, height=40,
+        self.HillcipherButton = customtkinter.CTkButton(self.navigation_frame, corner_radius=0, height=40,
                                                    border_spacing=10,
-                                                   text="third way",
+                                                   text="Hill Cipher",
                                                    fg_color="transparent", text_color=("gray10", "gray90"),
                                                    hover_color=("gray70", "gray30"),
-
                                                    image=self.logo_image, anchor="w",
-                                                   command=self.seventhFrame_button_event)
-        self.sevenButton.grid(row=4, column=0, sticky="ew", pady=5)
+                                                   command=self.Hillcipher_button_event)
+        self.HillcipherButton.grid(row=4, column=0, sticky="ew", pady=5)
         self.eightButton = customtkinter.CTkButton(self.navigation_frame, corner_radius=0, height=40,
                                                    border_spacing=10,
-                                                   text="third way",
+                                                   text="Substitution",
                                                    fg_color="transparent", text_color=("gray10", "gray90"),
                                                    hover_color=("gray70", "gray30"),
                                                    image=self.logo_image, anchor="w",
-                                                   command=self.eighthFrame_button_event)
+                                                   command=self.Subistitution_button_event)
         self.eightButton.grid(row=4, column=1, sticky="ew", pady=5)
-        self.nineButton = customtkinter.CTkButton(self.navigation_frame, corner_radius=0, height=40,
+        self.VigenereButton = customtkinter.CTkButton(self.navigation_frame, corner_radius=0, height=40,
                                                   border_spacing=10,
-                                                  text="third way",
+                                                  text="Vigenere",
                                                   fg_color="transparent", text_color=("gray10", "gray90"),
                                                   hover_color=("gray70", "gray30"),
                                                   image=self.logo_image, anchor="w",
-                                                  command=self.ninthFrame_button_event)
-        self.nineButton.grid(row=5, column=0, sticky="ew", pady=5)
+                                                  command=self.Vigenere_button_event)
+        self.VigenereButton.grid(row=5, column=0, sticky="ew", pady=5)
         self.tenButton = customtkinter.CTkButton(self.navigation_frame, corner_radius=0, height=40,
                                                  border_spacing=10,
                                                  text="third way",
@@ -147,30 +147,26 @@ class App(customtkinter.CTk):
         # ================> Frames Creation <===================
         self.ceaser = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.playFair = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
-        self.thirdFrame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
-        self.Affine = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
-        self.Transposition = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.RailFence = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.Affine = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
-        self.fifthFrame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
+        self.Transposition = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.Rot13 = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
-        self.seventhFrame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
-        self.eighthFrame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
-        self.ninthFrame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
+        self.Hillcipher = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
+        self.Subistitution = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
+        self.Vigenere = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.tenthFrame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.eleventhFrame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.twelvethFrame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
+
         self.create_gui_elements(self.ceaser, "Ceaser")
         self.create_gui_elements(self.playFair, "play Fair")
         self.create_gui_elements(self.RailFence, "Rail Fence")
         self.create_gui_elements(self.Affine, "Affine")
-
         self.create_gui_elements(self.Rot13, "Rot13")
-
         self.create_gui_elements(self.Transposition, "Transposition")
-        self.create_gui_elements(self.seventhFrame, "seventh way")
-        self.create_gui_elements(self.eighthFrame, "eighth way")
-        self.create_gui_elements(self.ninthFrame, "ninth way")
+        self.create_gui_elements(self.Hillcipher, "Hill Cipher")
+        self.create_gui_elements(self.Subistitution, "Subistitution")
+        self.create_gui_elements(self.Vigenere, "Vigenere")
         self.create_gui_elements(self.tenthFrame, "tenth way")
         self.create_gui_elements(self.eleventhFrame, "eleventh way")
         self.create_gui_elements(self.twelvethFrame, "twelveth way")
@@ -180,13 +176,12 @@ class App(customtkinter.CTk):
         self.bind_update_process_button_text(self.ceaser)
         self.bind_update_process_button_text(self.playFair)
         self.bind_update_process_button_text(self.Affine)
-        self.bind_update_process_button_text(self.fifthFrame)
         self.bind_update_process_button_text(self.Rot13)
         self.bind_update_process_button_text(self.Transposition)
         self.bind_update_process_button_text(self.RailFence)
-        self.bind_update_process_button_text(self.seventhFrame)
-        self.bind_update_process_button_text(self.eighthFrame)
-        self.bind_update_process_button_text(self.ninthFrame)
+        self.bind_update_process_button_text(self.Hillcipher)
+        self.bind_update_process_button_text(self.Subistitution)
+        self.bind_update_process_button_text(self.Vigenere)
         self.bind_update_process_button_text(self.tenthFrame)
         self.bind_update_process_button_text(self.eleventhFrame)
         self.bind_update_process_button_text(self.twelvethFrame)
@@ -197,14 +192,285 @@ class App(customtkinter.CTk):
         self.Affine.processButton.configure(command=self.AffineFunction)
         self.Rot13.processButton.configure(command=self.Rot13Function)
         self.Transposition.processButton.configure(command=self.TranspositionFunction)
-
         self.RailFence.processButton.configure(command = self.RailFenceButtonClicked)
+        self.Subistitution.processButton.configure(command = self.SubistitutionFunction)
+        self.Hillcipher.processButton.configure(command = self.HillcipherFunction)
+        self.Vigenere.processButton.configure(command = self.VigenereFunction)
         #Select first frame as a default ============================================
         self.select_frame_by_name("ceaser")
-
+        # ============================================================================
+        self.ceaser.selectFileButton.configure(command=lambda: self.add_content(self.ceaser))        # self.playFair.selectFileButton.configure(command=self.download(self.playFair))
+        self.Affine.selectFileButton.configure(command=lambda:self.add_content(self.Affine))
+        self.Rot13.selectFileButton.configure(command=lambda:self.add_content(self.Rot13))
+        self.Transposition.selectFileButton.configure(command=lambda:self.add_content(self.Transposition))
+        self.RailFence.selectFileButton.configure(command=lambda:self.add_content(self.RailFence))
+        self.Subistitution.selectFileButton.configure(command=lambda:self.add_content(self.Subistitution))
+        self.Hillcipher.selectFileButton.configure(command=lambda:self.add_content(self.Hillcipher))
+        self.Vigenere.selectFileButton.configure(command=lambda:self.add_content(self.Vigenere))
+        self.playFair.selectFileButton.configure(command=lambda:self.add_content(self.playFair))
+    # ============================================================================
+        self.ceaser.downloadButton.configure(command=lambda: self.download( self.ceaser))
+        self.Affine.downloadButton.configure(command=lambda: self.download(self.Affine))
+        self.Rot13.downloadButton.configure(command=lambda: self.download(self.Rot13))
+        self.Transposition.downloadButton.configure(command=lambda: self.download(self.Transposition))
+        self.RailFence.downloadButton.configure(command=lambda: self.download(self.RailFence))
+        self.Subistitution.downloadButton.configure(command=lambda: self.download(self.Subistitution))
+        self.Hillcipher.downloadButton.configure(command=lambda: self.download(self.Hillcipher))
+        self.Vigenere.downloadButton.configure(command=lambda: self.download(self.Vigenere))
+        self.playFair.downloadButton.configure(command=lambda: self.download(self.playFair))
+    #===============================================================
         # ==> Functions
+    def download(self,frameName):
+
+        message = frameName.decryptTextBox.get()
+
+        if message is not None:
+            file_path = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Text files", "*.txt")],
+                                                     title=f"Save {type} Message As")
+
+            if file_path:
+                # Write the encrypted message to the chosen file
+                with open(file_path, "w") as file:
+                    file.write(message)
+
+                messagebox.showinfo("Download", "Your Encrypted Message is Downloaded Successfully.")
+            else:
+                messagebox.showinfo("Download", "Download Cancelled.")
+    def VigenereFunction(self):
+        # Get the ciphertext and key from the input fields
+        self.Vigenere.keyTextBox.configure(state="readonly")
+        self.Vigenere.decryptTextBox.delete(0, "end")
+        PlainText = self.Vigenere.encryptTextBox.get()
+        key = self.Vigenere.keyTextBox.get()
+        rVar = self.Vigenere.radioVar.get()
+
+        if rVar == 0:
+            decryptedText = self.encryptionVigenereCipher(PlainText,key)
+            self.Vigenere.decryptTextBox.insert("end", decryptedText)
+        else:
+            encryptedText = self.decryptionVigenereCipher(PlainText,key)
+            self.Vigenere.decryptTextBox.insert("end", encryptedText)
+
+    def encryptionVigenereCipher(self,plainText, key):
+        allLetters = "abcdefghijklmnopqrstuvwxyz"
+        encryption = ""
+        plainText = plainText.lower()
+        key = key.lower()
+
+        oldKey1 = len(plainText) // len(key)
+        oldKey2 = len(plainText) / len(key)
+        if oldKey2 > oldKey1:
+            oldKey1 += 1
+
+        key *= oldKey1
+
+        j = 0
+        for i in range(len(plainText)):
+            if plainText[i] != ' ':
+                numberOfLetterInMessage = allLetters.find(plainText[i])
+                numberOfLetterInKey = allLetters.find(key[j])
+                numberOfLetterInEncryption = (numberOfLetterInMessage + numberOfLetterInKey) % 26
+                encryption += allLetters[numberOfLetterInEncryption]
+                j += 1
+            else:
+                encryption += ' '
+        return encryption
+
+    def decryptionVigenereCipher(self,cipherText, key):
+        allLetters = "abcdefghijklmnopqrstuvwxyz"
+        decryption = ""
+        cipherText = cipherText.lower()
+        key = key.lower()
+
+        oldKey1 = len(cipherText) // len(key)
+        oldKey2 = len(cipherText) / len(key)
+        if oldKey2 > oldKey1:
+            oldKey1 += 1
+
+        key *= oldKey1
+        j = 0
+        for i in range(len(cipherText)):
+            if cipherText[i] != ' ':
+                numberOfLetterInMessage = allLetters.find(cipherText[i])
+                numberOfLetterInKey = allLetters.find(key[j])
+                if (numberOfLetterInMessage - numberOfLetterInKey) < 0:
+                    numberOfLetterInDecryption = (numberOfLetterInMessage - numberOfLetterInKey) + 26
+                    decryption += allLetters[numberOfLetterInDecryption]
+                else:
+                    numberOfLetterInDecryption = (numberOfLetterInMessage - numberOfLetterInKey) % 26
+                    decryption += allLetters[numberOfLetterInDecryption]
+                j += 1
+            else:
+                decryption += ' '
+        return decryption
+    def HillcipherFunction(self):
+        # Get the ciphertext and key from the input fields
+        self.Hillcipher.keyTextBox.configure(state="readonly")
+        self.Hillcipher.decryptTextBox.delete(0, "end")
+        PlainText = self.Hillcipher.encryptTextBox.get()
+        key = self.Hillcipher.keyTextBox.get()
+        rVar = self.Hillcipher.radioVar.get()
+
+        if rVar == 0:
+            decryptedText = self.encryptHill2x2(PlainText,key)
+            self.Hillcipher.decryptTextBox.insert("end", decryptedText)
+        else:
+            encryptedText = self.decryptHill2x2(PlainText,key)
+            self.Hillcipher.decryptTextBox.insert("end", encryptedText)
+
+    def charToNum(self,char):
+        return ord(char.lower()) - ord('a')
+
+    def numToChar(self,num, is_upper):
+        char = chr(num % 26 + ord('a'))
+        if is_upper:
+            return char.upper()
+        else:
+            return char
+
+    def multiplyAndConvert(self,pair, keyMatrix):
+        pairNums = np.array([[self.charToNum(char)] for char in pair])
+        resultNums = np.dot(keyMatrix, pairNums).ravel() % 26
+        return ''.join(self.numToChar(num, char.isupper()) for num, char in zip(resultNums, pair))
+
+    def encryptHill2x2(self,text, keyMatrix):
+        if keyMatrix.replace(' ', '').isdigit():
+            # Split the string into a list of numbers
+            numbers = list(map(int, keyMatrix.split()))
+            # Arrange the numbers into a 2D numpy array
+            keyMatrix = np.array(numbers).reshape(-1, 2)
+        elif keyMatrix.isalpha():
+            keyMatrix = self.key_matrix(keyMatrix)
+
+        space_indices = [i for i, char in enumerate(text) if char == ' ']
+        text = text.replace(' ', '')
+        pairs = [text[i:i + 2] for i in range(0, len(text), 2)]
+        cipher = ''.join(self.multiplyAndConvert(pair, keyMatrix) for pair in pairs)
+        for index in space_indices:
+            cipher = cipher[:index] + ' ' + cipher[index:]
+        return cipher
+
+    # ----------------------------------------------------------------
+
+    def key_matrix(self,key):
+        key_values = [ord(char) - ord('a') for char in key]
+        matrix = np.array([[key_values[0], key_values[1]], [key_values[2], key_values[3]]])
+        if np.linalg.det(matrix) == 0:
+            print("Invalid Key")
+            exit()
+
+        return matrix
+
+    def inverse_matrix(self,matrix):
+        det = int(round(np.linalg.det(matrix)))
+        inv_det = pow(det, -1, 26)
+        adjoint_matrix = np.array([[matrix[1][1], -matrix[0][1]], [-matrix[1][0], matrix[0][0]]])
+        inverse = (inv_det * adjoint_matrix) % 26
+        return inverse
+
+    def decryptHill2x2(self,ciphertext, keyMatrix):
+        if isinstance(keyMatrix, str):
+            if keyMatrix.replace(' ', '').isdigit():
+                # Split the string into a list of numbers
+                numbers = list(map(int, keyMatrix.split()))
+                # Arrange the numbers into a 2D numpy array
+                keyMatrix = np.array(numbers).reshape(-1, 2)
+            elif keyMatrix.isalpha():
+                keyMatrix = self.key_matrix(keyMatrix)
+
+        space_indices = [i for i, char in enumerate(ciphertext) if char == ' ']
+        ciphertext = ciphertext.replace(' ', '')
+        inv_key = self.inverse_matrix(keyMatrix)
+        ciphertext_values = [ord(char.lower()) - ord('a') for char in ciphertext]
+        plaintext = ""
+        for i in range(0, len(ciphertext_values), 2):
+            block = np.array([[ciphertext_values[i]], [ciphertext_values[i + 1]]])
+            decrypted_block = np.dot(inv_key, block) % 26
+            for value, original_char in zip(decrypted_block, ciphertext[i:i + 2]):
+                plaintext += self.numToChar(value[0], original_char.isupper())
+        for index in space_indices:
+            plaintext = plaintext[:index] + ' ' + plaintext[index:]
+        return plaintext
+
+    def add_content(self,frameName):
+        # Ask the user to choose the file
+
+        file_path = filedialog.askopenfilename(filetypes=[("Text files", "*.txt")], title="Choose File")
+
+        if file_path:
+            # Open the selected file and read its content
+            with open(file_path, "r") as file:
+                file_content = file.read()
+
+            # Insert the file content into the entry widget
+                frameName.encryptTextBox.delete(0, "end")
+                frameName.encryptTextBox.insert(0, file_content)
 
 
+            messagebox.showinfo("File Loaded", "Content from the selected file has been loaded.")
+        else:
+            messagebox.showinfo("No File Selected", "No file selected. Operation cancelled.")
+    def Subistitutionencrypt(self,plaintext, key):
+        alphabet = 'abcdefghijklmnopqrstuvwxyz.,! '
+        keyIndices = [alphabet.index(k.lower()) for k in plaintext]
+        return ''.join(key[keyIndex] for keyIndex in keyIndices)
+
+    def Subistitutiondecrypt(self,cipher, key):
+        alphabet = 'abcdefghijklmnopqrstuvwxyz.,! '
+        keyIndices = [key.index(k) for k in cipher]
+        return ''.join(alphabet[keyIndex] for keyIndex in keyIndices)
+
+    def Rot13Function(self):
+        # Get the ciphertext and key from the input fields
+        self.Rot13.keyTextBox.configure(state="readonly")
+        self.Rot13.decryptTextBox.delete(0, "end")
+        PlainText = self.Rot13.encryptTextBox.get()
+        rVar = self.Rot13.radioVar.get()
+
+        if rVar == 0:
+            decryptedText = self.Rot13encrypt(PlainText)
+            self.Rot13.decryptTextBox.insert("end", decryptedText)
+        else:
+            encryptedText = self.Rot13decrypt(PlainText)
+            self.Rot13.decryptTextBox.insert("end", encryptedText)
+    def SubistitutionFunction(self):
+        # Get the ciphertext and key from the input fields
+        self.Subistitution.decryptTextBox.delete(0, "end")
+        PlainText = self.Subistitution.encryptTextBox.get()
+        k = self.Subistitution.keyTextBox.get()
+        rVar = self.Subistitution.radioVar.get()
+
+        if rVar == 0:
+            decryptedText = self.Subistitutionencrypt(PlainText,k)
+            self.Subistitution.decryptTextBox.insert("end", decryptedText)
+        else:
+            encryptedText = self.Subistitutiondecrypt(PlainText,k)
+            self.Subistitution.decryptTextBox.insert("end", encryptedText)
+
+
+    def Rot13encrypt(self, Plaintext):
+        translated = ''
+        for char in Plaintext:
+            if char.isalpha():
+                if char.isupper():
+                    translated += chr(((ord(char) - 65 + 13) % 26) + 65)
+                elif char.islower():
+                    translated += chr(((ord(char) - 97 + 13) % 26) + 97)
+            else:
+                translated += char
+        return translated
+
+    def Rot13decrypt(self, cipher_text):
+        decrypted = ''
+        for char in cipher_text:
+            if char.isalpha():
+                if char.isupper():
+                    decrypted += chr(((ord(char) - 65 - 13) % 26) + 65)
+                elif char.islower():
+                    decrypted += chr(((ord(char) - 97 - 13) % 26) + 97)
+            else:
+                decrypted += char
+        return decrypted
     def ceaserprocess_button_click(self):
         # Get the ciphertext and key from the input fields
         PTxt = self.ceaser.encryptTextBox.get()
@@ -283,21 +549,6 @@ class App(customtkinter.CTk):
         if null_count > 0:
             msg = msg[: -null_count]
         return msg
-
-        def ceaserprocess_button_click(self):
-            # Get the ciphertext and key from the input fields
-            PTxt = self.ceaser.encryptTextBox.get()
-            K = self.ceaser.keyTextBox.get()
-            CTxt = self.ceaser.decryptTextBox.get()
-            rVar = self.ceaser.radioVar.get()
-            # Perform decryption
-            if rVar == 0:
-                decryptedText = self.CeaserEncryption(PTxt, int(K))
-                self.ceaser.decryptTextBox.insert("end", decryptedText)
-            else:
-                encryptedText = self.CeaserDecryption(CTxt, int(K))
-                self.ceaser.encryptTextBox.insert("end", encryptedText)
-
     def AffineFunction(self):#function
         # Get the ciphertext and key from the input fields
         self.Affine.decryptTextBox.delete(0, "end")
@@ -331,13 +582,7 @@ class App(customtkinter.CTk):
                 self.Transposition.decryptTextBox.insert("end", Text)
 
 
-        # Perform decryption
-        if rVar == 0:
-            Text = self.encryptAffine(PTxt,k)
-            self.Affine.decryptTextBox.insert("end", Text)
-        else:
-            Text = self.decryptAffine(PTxt, k)
-            self.Affine.decryptTextBox.insert("end", Text)
+
 
     def inverse(self,b):
         # T = T1 - (T2 * Q)
@@ -602,45 +847,7 @@ class App(customtkinter.CTk):
         return decrypted_text
 
     # ---------------------------------------------
-    def Rot13Function(self):
-        # Get the ciphertext and key from the input fields
-        self.Rot13.keyTextBox.configure(state="readonly")
-        self.Rot13.decryptTextBox.delete(0,"end")
-        PlainText = self.Rot13.encryptTextBox.get()
-        rVar = self.Rot13.radioVar.get()
 
-        if rVar == 0 :
-             decryptedText = self.Rot13encrypt(PlainText)
-             self.Rot13.decryptTextBox.insert("end", decryptedText)
-        else :
-            encryptedText = self.Rot13decrypt(PlainText)
-            self.Rot13.decryptTextBox.insert("end", encryptedText)
-
-    def Rot13encrypt(self,Plaintext):
-        translated = ''
-        for char in Plaintext:
-            if char.isalpha():
-                if char.isupper():
-                    translated += chr(((ord(char) - 65 + 13) % 26) + 65)
-                elif char.islower():
-                    translated += chr(((ord(char) - 97 + 13) % 26) + 97)
-            else:
-                translated += char
-        return translated
-
-    def Rot13decrypt(self,cipher_text):
-        decrypted = ''
-        for char in cipher_text:
-            if char.isalpha():
-                if char.isupper():
-                    decrypted += chr(((ord(char) - 65 - 13) % 26) + 65)
-                elif char.islower():
-                    decrypted += chr(((ord(char) - 97 - 13) % 26) + 97)
-            else:
-                decrypted += char
-        return decrypted
-
-    # ================================================================
 
     def select_frame_by_name(self, name):
         # set button color for selected button
@@ -653,10 +860,9 @@ class App(customtkinter.CTk):
         self.RailFenceButton.configure(fg_color=("gray75", "gray25") if name == "RailFence" else "transparent")
     
         self.Rot13Button.configure(fg_color=("gray75", "gray25") if name == "Rot13" else "transparent")
-
-        self.sevenButton.configure(fg_color=("gray75", "gray25") if name == "seventhFrame" else "transparent")
-        self.eightButton.configure(fg_color=("gray75", "gray25") if name == "eighthFrame" else "transparent")
-        self.nineButton.configure(fg_color=("gray75", "gray25") if name == "ninthFrame" else "transparent")
+        self.HillcipherButton.configure(fg_color=("gray75", "gray25") if name == "Hillcipher" else "transparent")
+        self.eightButton.configure(fg_color=("gray75", "gray25") if name == "Subistitution" else "transparent")
+        self.VigenereButton.configure(fg_color=("gray75", "gray25") if name == "Vigenere" else "transparent")
         self.tenButton.configure(fg_color=("gray75", "gray25") if name == "tenthFrame" else "transparent")
         self.elevenButton.configure(fg_color=("gray75", "gray25") if name == "eleventhFrame" else "transparent")
         self.twelveButton.configure(fg_color=("gray75", "gray25") if name == "twelvethFrame" else "transparent")
@@ -693,19 +899,19 @@ class App(customtkinter.CTk):
         else:
             self.Rot13.grid_forget()
 
-        if name == "seventhFrame":
-            self.seventhFrame.grid(row=0, column=1, sticky="nsew")
+        if name == "Hillcipher":
+            self.Hillcipher.grid(row=0, column=1, sticky="nsew")
         else:
-            self.seventhFrame.grid_forget()
+            self.Hillcipher.grid_forget()
 
-        if name == "eighthFrame":
-            self.eighthFrame.grid(row=0, column=1, sticky="nsew")
+        if name == "Subistitution":
+            self.Subistitution.grid(row=0, column=1, sticky="nsew")
         else:
-            self.eighthFrame.grid_forget()
-        if name == "ninthFrame":
-            self.ninthFrame.grid(row=0, column=1, sticky="nsew")
+            self.Subistitution.grid_forget()
+        if name == "Vigenere":
+            self.Vigenere.grid(row=0, column=1, sticky="nsew")
         else:
-            self.ninthFrame.grid_forget()
+            self.Vigenere.grid_forget()
         if name == "tenthFrame":
             self.tenthFrame.grid(row=0, column=1, sticky="nsew")
         else:
@@ -738,12 +944,12 @@ class App(customtkinter.CTk):
 
     def Rot13_button_event(self):
         self.select_frame_by_name("Rot13")
-    def seventhFrame_button_event(self):
-        self.select_frame_by_name("seventhFrame")
-    def eighthFrame_button_event(self):
-        self.select_frame_by_name("eighthFrame")
-    def ninthFrame_button_event(self):
-        self.select_frame_by_name("ninthFrame")
+    def Hillcipher_button_event(self):
+        self.select_frame_by_name("Hillcipher")
+    def Subistitution_button_event(self):
+        self.select_frame_by_name("Subistitution")
+    def Vigenere_button_event(self):
+        self.select_frame_by_name("Vigenere")
     def tenthFrame_button_event(self):
         self.select_frame_by_name("tenthFrame")
     def eleventhFrame_button_event(self):
@@ -751,14 +957,14 @@ class App(customtkinter.CTk):
     def twelvethFrame_button_event(self):
         self.select_frame_by_name("twelvethFrame")
 
-    def seventhFrame_button_event(self):
-        self.select_frame_by_name("seventhFrame")
+    def Hillcipher_button_event(self):
+        self.select_frame_by_name("Hillcipher")
 
-    def eighthFrame_button_event(self):
-        self.select_frame_by_name("eighthFrame")
+    def Subistitution_button_event(self):
+        self.select_frame_by_name("Subistitution")
 
-    def ninthFrame_button_event(self):
-        self.select_frame_by_name("ninthFrame")
+    def Vigenere_button_event(self):
+        self.select_frame_by_name("Vigenere")
 
     def tenthFrame_button_event(self):
         self.select_frame_by_name("tenthFrame")
@@ -810,18 +1016,18 @@ class App(customtkinter.CTk):
                                                 hover_color=("gray70", "gray30"), anchor="ns",command = lambda:self.ClearFields(frame_name))
         clearButton.grid(row=4, column=1, sticky="s", pady=5,padx=5, columnspan=2)
 
-        selectFileButton = customtkinter.CTkButton(frame_name, text="Select File", width=300, height=40,
-                                                   command=self.select_file)
+        selectFileButton = customtkinter.CTkButton(frame_name, text="Select File", width=300, height=40
+                                                   )
         selectFileButton.grid(row=5, column=0, sticky="s", pady=5, columnspan=2)
 
-        downloadFileButton = customtkinter.CTkButton(frame_name, text="Download File", width=300, height=40 , command = self.download_file)
+        downloadFileButton = customtkinter.CTkButton(frame_name, text="Download File", width=300, height=40 )
         downloadFileButton.grid(row=6, column=0, sticky="s", pady=5, columnspan=2)
 
         frame_name.encryptTextBox = encryptTextBox
         frame_name.Frame_label = Frame_label
         frame_name.encryptionRadio = encryptionRadio
         frame_name.decryptionRadio = decryptionRadio
-        frame_name.decryptTextBox = decryptTextBox
+        frame_name.decryptTextBox  = decryptTextBox
         frame_name.keyTextBox = keyTextBox
         frame_name.processButton = processButton
         frame_name.selectFileButton = selectFileButton
@@ -829,50 +1035,7 @@ class App(customtkinter.CTk):
         frame_name.radioVar = radio_var
 
 
-    def select_file(self,frameName):
-        filename = filedialog.askopenfilename(title="Select file to add")
-        if filename:
-            try:
-                with open(filename, "r") as file:
-                    frameName.file_content = file.read()
-            except Exception as e:
-                print("Error:", e)
 
-    def select_file(self):
-        filename = filedialog.askopenfilename(title="Select file to add")
-        rVar = self.ceaser.radioVar.get()
-        if filename:
-            try:
-                with open(filename, "r") as file:
-                    file_content = file.read()
-                try:
-                    K = int(self.ceaser.keyTextBox.get())
-                except ValueError:
-                    print("Invalid input: Please enter a valid integer.")
-                    K = 0
-                if rVar==0:
-                    edited_content = self.CeaserEncryption(file_content,K)
-                else :
-                    edited_content = self.CeaserDecryption(file_content,K)
-                edited_filename = "edited_file.txt"
-                self.ceaser.filecontent = edited_content
-                # with open(edited_filename, "w") as edited_file:
-                #     edited_file.write(edited_content)
-                print("Edited file Opened successfully:", edited_filename)
-            except Exception as e:
-                # Print an error message if any exception occurs
-                print("Error:", e)
-    def download_file(self):
-        content = self.ceaser.filecontent
-        # print(file)
-        file_path = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Text files", "*.txt")],
-                                                 title=f"Save {type} Message As")
-        if file_path:
-            # Write the encrypted message to the chosen file
-            with open(file_path, "w") as file:
-                file.write(content)
-
-        print("Edited file Downloaded successfully:", file)
 
 
 if __name__ == "__main__":
