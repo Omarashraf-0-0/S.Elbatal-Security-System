@@ -1,10 +1,9 @@
 import tkinter
-from tkinter import filedialog
+from tkinter import filedialog, messagebox
 
 import customtkinter
 import os
 from PIL import Image
-
 
 class App(customtkinter.CTk):
     def __init__(self):
@@ -37,16 +36,16 @@ class App(customtkinter.CTk):
                                                    fg_color="transparent", text_color=("gray10", "gray90"),
                                                    hover_color=("gray70", "gray30"),
                                                    image=self.logo_image, anchor="w",
-                                                   command=self.firstFrame_button_event)
+                                                   command=self.ceaser_button_event)
         self.firstButton.grid(row=1, column=0, sticky="ew", pady=5)
         self.secondButton = customtkinter.CTkButton(self.navigation_frame, corner_radius=0, height=40,
                                                     border_spacing=10,
-                                                    text="Second way",
+                                                    text="play Fair",
                                                     fg_color="transparent", text_color=("gray10", "gray90"),
                                                     hover_color=("gray70", "gray30"),
 
                                                     image=self.logo_image, anchor="w",
-                                                    command=self.secondFrame_button_event)
+                                                    command=self.playFair_button_event)
 
         self.secondButton.grid(row=1, column=1, sticky="ew", pady=5)
         self.thirdButton = customtkinter.CTkButton(self.navigation_frame, corner_radius=0, height=40,
@@ -146,8 +145,8 @@ class App(customtkinter.CTk):
         self.appearance_mode_menu.grid(row=7, column=0, padx=0, pady=10, sticky="n", columnspan=2)
         # ================> end of navigation <=================
         # ================> Frames Creation <===================
-        self.firstFrame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
-        self.secondFrame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
+        self.ceaser = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
+        self.playFair = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.thirdFrame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.fourthFrame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.fifthFrame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
@@ -159,9 +158,8 @@ class App(customtkinter.CTk):
         self.eleventhFrame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
         self.twelvethFrame = customtkinter.CTkFrame(self, corner_radius=0, fg_color="transparent")
 
-
-        self.create_gui_elements(self.firstFrame, "Ceaser")
-        self.create_gui_elements(self.secondFrame, "second way")
+        self.create_gui_elements(self.ceaser, "Ceaser")
+        self.create_gui_elements(self.playFair, "play Fair")
         self.create_gui_elements(self.thirdFrame, "thirdFrame way")
         self.create_gui_elements(self.fourthFrame, "fourthFrame way")
         self.create_gui_elements(self.fifthFrame, "fifthFrame way")
@@ -174,8 +172,8 @@ class App(customtkinter.CTk):
         self.create_gui_elements(self.twelvethFrame, "twelveth way")
 
 #==============> Edit process button name
-        self.bind_update_process_button_text(self.firstFrame)
-        self.bind_update_process_button_text(self.secondFrame)
+        self.bind_update_process_button_text(self.ceaser)
+        self.bind_update_process_button_text(self.playFair)
         self.bind_update_process_button_text(self.thirdFrame)
         self.bind_update_process_button_text(self.fourthFrame)
         self.bind_update_process_button_text(self.fifthFrame)
@@ -187,26 +185,27 @@ class App(customtkinter.CTk):
         self.bind_update_process_button_text(self.eleventhFrame)
         self.bind_update_process_button_text(self.twelvethFrame)
 #================================================================>>
-        self.firstFrame.processButton.configure(command=self.firstFrameprocess_button_click)
-
+        self.ceaser.processButton.configure(command=self.ceaserprocess_button_click)
+        self.playFair.processButton.configure(command=self.playFairFunction)
         #Select first frame as a default ============================================
+        self.select_frame_by_name("ceaser")
 
-        self.select_frame_by_name("firstFrame")
         # ==> Functions
 
-    def firstFrameprocess_button_click(self):
+    def ceaserprocess_button_click(self):
         # Get the ciphertext and key from the input fields
-        PTxt = self.firstFrame.encryptTextBox.get()
-        K = self.firstFrame.keyTextBox.get()
-        CTxt = self.firstFrame.decryptTextBox.get()
-        rVar = self.firstFrame.radioVar.get()
+        PTxt = self.ceaser.encryptTextBox.get()
+        K = self.ceaser.keyTextBox.get()
+        CTxt = self.ceaser.decryptTextBox.get()
+        rVar = self.ceaser.radioVar.get()
         # Perform decryption
         if rVar == 0 :
              decryptedText = self.CeaserEncryption(PTxt, int(K))
-             self.firstFrame.decryptTextBox.insert("end", decryptedText)
+             self.ceaser.decryptTextBox.insert("end", decryptedText)
         else :
             encryptedText = self.CeaserDecryption(CTxt, int(K))
-            self.firstFrame.encryptTextBox.insert("end", encryptedText)
+            self.ceaser.encryptTextBox.insert("end", encryptedText)
+
 
     def bind_update_process_button_text(self, frame):
             frame.radioVar.trace("w", lambda *args, f=frame: self.update_process_button_text(f))
@@ -221,7 +220,7 @@ class App(customtkinter.CTk):
                 ans += chr((ord(ch) + n - 65) % 26 + 65)
             else:
                 ans += chr((ord(ch) + n - 97) % 26 + 97)
-        self.firstFrame.decryptTextBox.delete(0, "end")
+        self.ceaser.decryptTextBox.delete(0, "end")
         return ans
     def CeaserDecryption(self,plaintext,n):
         ans = ""
@@ -230,11 +229,105 @@ class App(customtkinter.CTk):
             if ch == " ":
                 ans += " "
             elif (ch.isupper()):
-                ans += chr((ord(ch) + n - 65) % 26 + 65)
+                ans += chr((ord(ch) - n - 65) % 26 + 65)
             else:
-                ans += chr((ord(ch) + n - 97) % 26 + 97)
-        self.firstFrame.encryptTextBox.delete(0, "end")
+                ans += chr((ord(ch) - n - 97) % 26 + 97)
+        self.ceaser.encryptTextBox.delete(0, "end")
         return ans
+
+#==========================================================>
+    def generateKeyMatrix(self,key):
+        alphabet = "ABCDEFGHIKLMNOPQRSTUVWXYZ"
+        keyMatrix = [[None] * 5 for _ in range(5)]
+        keySet = set()
+        for char in key + alphabet:
+            if char not in keySet:
+                row, col = divmod(len(keySet), 5)
+                keyMatrix[row][col] = char
+                keySet.add(char)
+        return keyMatrix
+
+    def prepareMessage(self,message):
+        message = message.upper().replace(" ", "")
+        preparedMessage = ""
+        i = 0
+        while i < len(message):
+            if i == len(message) - 1:
+                preparedMessage += message[i] + "X"
+            elif message[i] == message[i + 1]:
+                preparedMessage += message[i] + "X"
+                i -= 1
+            else:
+                preparedMessage += message[i:i + 2]
+            i += 2
+
+        return preparedMessage
+
+    def encryptMessage(self,keyMatrix, message):
+        encryptedMessage = ""
+
+        for i in range(0, len(message), 2):
+            a, b = message[i], message[i + 1]
+            rowA, colA = self.findPosition(keyMatrix, a)
+            rowB, colB = self.findPosition(keyMatrix, b)
+            if rowA == rowB:
+                encryptedMessage += keyMatrix[rowA][(colA + 1) % 5] + keyMatrix[rowB][(colB + 1) % 5]
+            elif colA == colB:
+                encryptedMessage += keyMatrix[(rowA + 1) % 5][colA] + keyMatrix[(rowB + 1) % 5][colB]
+            else:
+                encryptedMessage += keyMatrix[rowA][colB] + keyMatrix[rowB][colA]
+        return encryptedMessage
+
+    def findPosition(self,keyMatrix, char):
+        for i in range(5):
+            for j in range(5):
+                if keyMatrix[i][j] == char:
+                    return i,j
+    def decryptMessage(self,keyMatrix, message):
+        decryptedMessage = ""
+        for i in range(0, len(message), 2):
+            a, b = message[i], message[i + 1]
+            rowA, colA = self.findPosition(keyMatrix, a)
+            rowB, colB = self.findPosition(keyMatrix, b)
+
+            if rowA == rowB:
+                decryptedMessage += keyMatrix[rowA][(colA - 1) % 5] + keyMatrix[rowB][(colB - 1) % 5]
+            elif colA == colB:
+                decryptedMessage += keyMatrix[(rowA - 1) % 5][colA] + keyMatrix[(rowB - 1) % 5][colB]
+            else:
+                decryptedMessage += keyMatrix[rowA][colB] + keyMatrix[rowB][colA]
+        return decryptedMessage
+
+
+    def playFairFunction(self):
+        msg = self.playFair.encryptTextBox.get()
+        ky = self.playFair.keyTextBox.get()
+        rVar = self.playFair.radioVar.get()
+        # Validate inputs
+        if not msg or not ky or not ky.isalpha() :
+            messagebox.showerror("Error", msg)
+            return
+
+        # Prepare key matrix
+        key = ky.upper().replace(" ", "")
+        keyMatrix = self.generateKeyMatrix(key)
+
+        # Prepare message
+        msg = self.prepareMessage(msg)
+
+        # Perform operation
+        if rVar == 0:
+            result = self.encryptMessage(keyMatrix, msg)
+            self.playFair.decryptTextBox.delete(0,tkinter.END)
+            self.playFair.decryptTextBox.insert("end", result)
+        elif rVar == 1:
+
+            result = self.decryptMessage(keyMatrix, msg)
+            self.playFair.decryptTextBox.delete(0,tkinter.END)
+            self.playFair.decryptTextBox.insert("end", result)
+
+        # return result
+#==============================================================>
     def update_process_button_text(self, frame):
             # Get the value of the variable to determine which radio button is selected
             selected_value = frame.radioVar.get()
@@ -258,8 +351,8 @@ class App(customtkinter.CTk):
     def select_frame_by_name(self, name):
         # set button color for selected button
 
-        self.firstButton.configure(fg_color=("gray75", "gray25") if name == "firstFrame" else "transparent")
-        self.secondButton.configure(fg_color=("gray75", "gray25") if name == "secondFrame" else "transparent")
+        self.firstButton.configure(fg_color=("gray75", "gray25") if name == "ceaser" else "transparent")
+        self.secondButton.configure(fg_color=("gray75", "gray25") if name == "playFair" else "transparent")
         self.thirdButton.configure(fg_color=("gray75", "gray25") if name == "thirdFrame" else "transparent")
         self.fourthButton.configure(fg_color=("gray75", "gray25") if name == "fourthFrame" else "transparent")
         self.fifthButton.configure(fg_color=("gray75", "gray25") if name == "fifthFrame" else "transparent")
@@ -273,15 +366,15 @@ class App(customtkinter.CTk):
 
 
         # show selected frame
-        if name == "firstFrame":
-            self.firstFrame.grid(row=0, column=1, sticky="nsew")
+        if name == "ceaser":
+            self.ceaser.grid(row=0, column=1, sticky="nsew")
         else:
-            self.firstFrame.grid_forget()
+            self.ceaser.grid_forget()
 
-        if name == "secondFrame":
-            self.secondFrame.grid(row=0, column=1, sticky="nsew")
+        if name == "playFair":
+            self.playFair.grid(row=0, column=1, sticky="nsew")
         else:
-            self.secondFrame.grid_forget()
+            self.playFair.grid_forget()
 
         if name == "thirdFrame":
             self.thirdFrame.grid(row=0, column=1, sticky="nsew")
@@ -331,11 +424,11 @@ class App(customtkinter.CTk):
             self.twelvethFrame.grid_forget()
 
     # -----------------------------------------
+    def ceaser_button_event(self):
+        self.select_frame_by_name("ceaser")
+    def playFair_button_event(self):
+        self.select_frame_by_name("playFair")
 
-    def firstFrame_button_event(self):
-        self.select_frame_by_name("firstFrame")
-    def secondFrame_button_event(self):
-        self.select_frame_by_name("secondFrame")
 
     def thirdFrame_button_event(self):
         self.select_frame_by_name("thirdFrame")
@@ -442,30 +535,39 @@ class App(customtkinter.CTk):
 
     def select_file(self):
         filename = filedialog.askopenfilename(title="Select file to add")
+        rVar = self.ceaser.radioVar.get()
         if filename:
             try:
                 with open(filename, "r") as file:
                     file_content = file.read()
                 try:
-                    K = int(self.firstFrame.keyTextBox.get())
+                    K = int(self.ceaser.keyTextBox.get())
                 except ValueError:
                     print("Invalid input: Please enter a valid integer.")
                     K = 0
-                edited_content = self.CeaserDecryption(file_content,K)
+                if rVar==0:
+                    edited_content = self.CeaserEncryption(file_content,K)
+                else :
+                    edited_content = self.CeaserDecryption(file_content,K)
                 edited_filename = "edited_file.txt"
-                self.firstFrame.filecontent = edited_content
-                with open(edited_filename, "w") as edited_file:
-                    edited_file.write(edited_content)
-                print("Edited file created successfully:", edited_filename)
+                self.ceaser.filecontent = edited_content
+                # with open(edited_filename, "w") as edited_file:
+                #     edited_file.write(edited_content)
+                print("Edited file Opened successfully:", edited_filename)
             except Exception as e:
                 # Print an error message if any exception occurs
                 print("Error:", e)
     def download_file(self):
-        file = self.firstFrame.filecontent
-        edited_filename = "Encrypted file.txt"
-        with open(edited_filename, "w") as edited_file:
-            edited_file.write(file)
-        print("Edited file created successfully:", edited_filename)
+        content = self.ceaser.filecontent
+        # print(file)
+        file_path = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Text files", "*.txt")],
+                                                 title=f"Save {type} Message As")
+        if file_path:
+            # Write the encrypted message to the chosen file
+            with open(file_path, "w") as file:
+                file.write(content)
+
+        print("Edited file Downloaded successfully:", file)
 
 
 if __name__ == "__main__":
