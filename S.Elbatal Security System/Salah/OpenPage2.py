@@ -7,8 +7,10 @@ from PIL import Image, ImageTk
 import sys
 from tkinter import messagebox
 import cv2
+import sys
+import os
 
-LoginFilePath = "C:\\Users\\Aly\\Downloads\\OpenPage\\OpenPage\\test.txt"
+LoginFilePath = "C:\\Python Project\\S.elbatal-Encryptor\\test.txt"
 
 
 class VideoPlayer(tk.Label):
@@ -96,7 +98,15 @@ def Login():
         messagebox.showerror("Error", "Wrong Username or Password")
     else:
         messagebox.showinfo("Success", "Login Done Successfully")
-        //go to t
+        # Add the directory containing project.py to the system path
+        sys.path.insert(0, 'C:\\Python Project\\S.elbatal-Encryptor')
+
+
+        import project
+        project.main()  # Call the main function from project.py
+
+        # ... existing code ...
+
     return UserFound
 
 
